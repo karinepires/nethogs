@@ -309,17 +309,6 @@ void do_refresh()
 	int col; // number of terminal columns
 	unsigned int proglen; // max length of the "PROGRAM" column
 
-	getmaxyx(stdscr, row, col);	 /* find the boundaries of the screeen */
-	if (col < 60) {
-		clear();
-		mvprintw(0,0, "The terminal is too narrow! Please make it wider.\nI'll wait...");
-		return;
-	}
-
-	if (col > PROGNAME_WIDTH) col = PROGNAME_WIDTH;
-
-	proglen = col - 53;
-
 	refreshconninode();
 	if (DEBUG || tracemode)
 	{
@@ -327,6 +316,16 @@ void do_refresh()
 	}
 	else
 	{
+		getmaxyx(stdscr, row, col);	 /* find the boundaries of the screeen */
+		if (col < 60) {
+			clear();
+			mvprintw(0,0, "The terminal is too narrow! Please make it wider.\nI'll wait...");
+			return;
+		}
+
+		if (col > PROGNAME_WIDTH) col = PROGNAME_WIDTH;
+
+		proglen = col - 53;
 		clear();
 		mvprintw (0, 0, "%s", caption->c_str());
 		attron(A_REVERSE);
